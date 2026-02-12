@@ -1,14 +1,17 @@
 package com.devsuperior.dscatalog.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
+import java.time.Instant;
+
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
+@ToString
 @Entity
 @Table(name = "tb_category")
 public class Category implements Serializable {
@@ -18,5 +21,21 @@ public class Category implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    @Setter(AccessLevel.NONE)
+    private Instant createdAt;
+
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    @Setter(AccessLevel.NONE)
+    private Instant updatedAt;
+    @PrePersist
+    public void prePersist() {
+        createdAt = Instant.now();
+    }
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = Instant.now();
+    }
 
 }
